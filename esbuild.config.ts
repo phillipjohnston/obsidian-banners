@@ -14,14 +14,16 @@ Please visit the repository linked to view the source code:
 https://github.com/noatpad/obsidian-banners
 */`;
 const prod = (process.argv[2] === 'prod');
-const outdir = 'dist';
+const outdir = '.';
 
 const obsimove: esbuild.Plugin = {
   name: 'obsimove',
   setup(build) {
     build.onEnd(async () => {
       await fs.rename(`${outdir}/main.css`, `${outdir}/styles.css`);
-      await fs.copyFile('manifest.json', `${outdir}/manifest.json`);
+      if (outdir !== '.') {
+        await fs.copyFile('manifest.json', `${outdir}/manifest.json`);
+      }
       await fs.writeFile(`${outdir}/.hotreload`, '');
 
       // Copy to dev vault if needed
