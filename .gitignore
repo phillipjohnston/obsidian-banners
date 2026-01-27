@@ -3,6 +3,12 @@ node_modules/
 main.js
 styles.css
 
+# User artifacts
+data.json
+
+# Claude
+.claude
+
 # Local only
 .hotreload
 .env
