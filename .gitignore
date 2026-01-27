@@ -1,5 +1,9 @@
+# Build Artifacts
 node_modules/
-dist/
+main.js
+styles.css
+
+# Local only
 .hotreload
 .env
 .vscode
