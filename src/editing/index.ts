@@ -15,7 +15,9 @@ export const loadExtensions = () => {
 
   // Properly insert a banner upon loading the banner
   iterateMarkdownLeaves((leaf) => {
-    leaf.view.editor.cm.dispatch({ effects: openNoteEffect.of(null) });
+    if (leaf.view.editor?.cm) {
+      leaf.view.editor.cm.dispatch({ effects: openNoteEffect.of(null) });
+    }
   }, 'editing');
 };
 
@@ -27,7 +29,9 @@ export const registerEditorBannerEvents = () => {
     'defaultHeaderValue'
   ], () => {
     iterateMarkdownLeaves((leaf) => {
-      leaf.view.editor.cm.dispatch({ effects: refreshEffect.of(null) });
+      if (leaf.view.editor?.cm) {
+        leaf.view.editor.cm.dispatch({ effects: refreshEffect.of(null) });
+      }
     }, 'editing');
   });
 
@@ -37,7 +41,7 @@ export const registerEditorBannerEvents = () => {
     plug.app.workspace.on('layout-change', () => {
       plug.app.workspace.iterateRootLeaves((leaf) => {
         const { id, view } = leaf;
-        if (doesLeafHaveMarkdownMode(leaf)) {
+        if (doesLeafHaveMarkdownMode(leaf) && view.editor?.cm) {
           const { mode } = (leaf.getViewState() as MarkdownViewState).state;
           const effects = mode === 'source'
             ? openNoteEffect.of(null)
