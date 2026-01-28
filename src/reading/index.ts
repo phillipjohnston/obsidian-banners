@@ -17,6 +17,7 @@ Reload app or manually edit the view/contents to fix */
 const rerender = () => {
   for (const leaf of plug.app.workspace.getLeavesOfType('markdown')) {
     const { previewMode } = leaf.view;
+    if (!previewMode?.renderer) continue;
     const sections = previewMode.renderer.sections.filter((s) => (
       s.el.querySelector('pre.frontmatter, .internal-embed')
     ));
@@ -86,7 +87,9 @@ export const registerReadingBannerEvents = () => {
   // Edge case when switching from a note with a banner to a banner with no data to postprocess
   plug.registerEvent(plug.app.workspace.on('layout-change', () => {
     iterateMarkdownLeaves((leaf) => {
-      if (!leaf.view.file.stat.size) destroyBanner(leaf.view.previewMode.docId);
+      if (!leaf.view.file.stat.size && leaf.view.previewMode?.docId) {
+        destroyBanner(leaf.view.previewMode.docId);
+      }
     }, 'reading');
   }));
 };
