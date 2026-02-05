@@ -13,7 +13,7 @@
 </div>
 
 <style lang="scss">
-  @import './mixins.scss';
+  @use './mixins.scss' as *;
 
   .wrapper {
     @include info-box-wrapper;

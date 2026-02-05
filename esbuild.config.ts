@@ -1,11 +1,14 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import 'dotenv/config';
 import fs from 'fs/promises';
+import path from 'path';
+import { pathToFileURL } from 'url';
 import builtins from 'builtin-modules';
 // @ts-ignore
 import copyNewer from 'copy-newer';
 import esbuild from 'esbuild';
 import esbuildSvelte from 'esbuild-svelte';
+import * as sass from 'sass';
 import sveltePreprocess from 'svelte-preprocess';
 
 const BANNER = `/*
@@ -42,7 +45,15 @@ const context = await esbuild.context({
   plugins: [
     esbuildSvelte({
       compilerOptions: { css: 'external' },
-      preprocess: sveltePreprocess()
+      preprocess: sveltePreprocess({
+        scss: ({ content, filename }) => {
+          const { css, sourceMap } = sass.compileString(content, {
+            url: filename ? pathToFileURL(path.resolve(filename)) : undefined,
+            sourceMap: true
+          });
+          return { code: css, map: sourceMap };
+        }
+      })
     }),
     obsimove
   ],
