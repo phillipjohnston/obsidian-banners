@@ -87,7 +87,7 @@ export const registerReadingBannerEvents = () => {
   // Edge case when switching from a note with a banner to a banner with no data to postprocess
   plug.registerEvent(plug.app.workspace.on('layout-change', () => {
     iterateMarkdownLeaves((leaf) => {
-      if (!leaf.view.file.stat.size && leaf.view.previewMode?.docId) {
+      if (!leaf.view.file?.stat?.size && leaf.view.previewMode?.docId) {
         destroyBanner(leaf.view.previewMode.docId);
       }
     }, 'reading');
