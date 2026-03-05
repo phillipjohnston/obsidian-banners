@@ -1,5 +1,6 @@
 # Build Artifacts
 node_modules/
+package-lock.json
 main.js
 styles.css
 
